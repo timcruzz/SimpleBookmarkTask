@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 data class TaskItemModel(
     val id: Int,
     val title: String?,
-    val duration: String?,
-    val themeColor: Color?
+    val duration: Int?,
+    val themeColorString: String?,
+    val themeColor: Color
 )

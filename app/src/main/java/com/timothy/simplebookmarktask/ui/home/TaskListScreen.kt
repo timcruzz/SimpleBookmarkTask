@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -20,12 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.timothy.simplebookmarktask.R
-import com.timothy.simplebookmarktask.data.db.entity.TaskItem
+import com.timothy.simplebookmarktask.config.ColorPalette
+import com.timothy.simplebookmarktask.config.Constants
 import com.timothy.simplebookmarktask.domain.models.TaskItemModel
+import com.timothy.simplebookmarktask.ui.navigation.navigateToConfigTaskListScreen
 import com.timothy.simplebookmarktask.ui.theme.ColorTheme
 import com.timothy.simplebookmarktask.utilities.GradientPositions
 import com.timothy.simplebookmarktask.utilities.gradientBackground
@@ -40,7 +41,12 @@ fun TaskListScreen(navController: NavHostController) {
         factory = TaskListViewModelFactory(application)
     )
 
+    LaunchedEffect(Unit){
+        viewModel.fetchTaskFromDB()
+    }
+
     TaskListContent(
+        navController = navController,
         modifier = Modifier,
         taskList = viewModel.taskList
     )
@@ -49,12 +55,20 @@ fun TaskListScreen(navController: NavHostController) {
 @Composable
 fun TaskListContent(
     modifier: Modifier,
+    navController: NavHostController?,
     taskList: List<TaskItemModel>
 ) {
     val scrollState = rememberScrollState()
 
     TaskListStructure(modifier = modifier,
-        TopBar = { TopBar() },
+        TopBar = { TopBar{
+            navController?.let{
+                navigateToConfigTaskListScreen(
+                    navController = navController,
+                    configIdentifier = Constants.ConfigIdentifier.ADD_TASK_KEY
+                )
+            }
+        } },
         BodyList = {
             BodyList(
                 scrollState,
@@ -148,7 +162,6 @@ fun BodyList(
             .fillMaxSize()
             .background(ColorTheme.MainColor.creamWhite)
     ) {
-
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
@@ -218,7 +231,7 @@ private fun TaskListItem(
                     .align(Alignment.Center)
                     .size(18.dp)
                     .clip(RoundedCornerShape(50.dp))
-                    .background(taskItem.themeColor ?: ColorTheme.TileColor.blackBrown)
+                    .background(taskItem.themeColor)
                     .alpha(0.7f)
             )
         }
@@ -243,7 +256,7 @@ private fun TaskListItem(
                         .fillMaxSize()
                         .gradientBackground(
                             colors = listOf(
-                                taskItem.themeColor ?: ColorTheme.TileColor.creamWhite,
+                                taskItem.themeColor,
                                 ColorTheme.TileColor.skyBlue,
                             ),
                             startPosition = GradientPositions.BOTTOM_START,
@@ -281,33 +294,38 @@ private fun TaskListItem(
 
 @Preview(showBackground = true)
 @Composable
-fun FullContentPreview() {
+private fun FullContentPreview() {
     TaskListContent(
         Modifier,
+        null,
         listOf(
             TaskItemModel(
                 id = 1,
                 title = "This is Title Design App",
-                duration = "min",
-                themeColor = ColorTheme.TileColor.orange
+                duration = 12,
+                themeColorString = ColorPalette.RED.colorStr,
+                themeColor = ColorPalette.RED.colorValue,
             ),
             TaskItemModel(
                 id = 2,
                 title = "This is iApp D Title Design App",
-                duration = "min",
-                themeColor = ColorTheme.TileColor.darkBlue
+                duration = 12,
+                themeColorString =  ColorPalette.RED.colorStr,
+                themeColor = ColorPalette.RED.colorValue,
             ),
             TaskItemModel(
                 id = 3,
                 title = "This is Title Design App",
-                duration = "min",
-                themeColor = ColorTheme.TileColor.redPink
+                duration = 12,
+                themeColorString =  ColorPalette.RED.colorStr,
+                themeColor = ColorPalette.RED.colorValue,
             ),
             TaskItemModel(
                 id = 4,
                 title = "This is Title Design App",
-                duration = "min",
-                themeColor = ColorTheme.TileColor.blackBrown
+                duration = 12,
+                themeColorString =  ColorPalette.RED.colorStr,
+                themeColor = ColorPalette.RED.colorValue,
             )
         )
     )
@@ -315,6 +333,6 @@ fun FullContentPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun TopBarPreview() {
+private fun TopBarPreview() {
     TopBar()
 }
