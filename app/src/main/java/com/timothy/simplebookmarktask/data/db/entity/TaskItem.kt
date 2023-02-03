@@ -12,7 +12,7 @@ data class TaskItem(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = "title") var title: String?,
-    @ColumnInfo(name = "duration") var duration: String?,
+    @ColumnInfo(name = "duration") var duration: Int?,
     @ColumnInfo(name = "themeColor") var themeColor: String?
 ) {
     companion object {

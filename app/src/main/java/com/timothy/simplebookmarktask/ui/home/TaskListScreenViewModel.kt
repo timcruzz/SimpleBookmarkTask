@@ -23,11 +23,7 @@ class TaskListScreenViewModel(
 
     val taskList = mutableStateListOf<TaskItemModel>()
 
-    init {
-        fetchTaskFromDB()
-    }
-
-    private fun fetchTaskFromDB() = runBlocking<Unit> {
+     fun fetchTaskFromDB() = runBlocking<Unit> {
         taskRepository.getAllTask().onEach { result ->
             when (result) {
                is Response.Success -> {
@@ -55,6 +51,7 @@ class TaskListScreenViewModel(
     }
 
     private fun populateTask(item: List<TaskItem>) {
+        taskList.clear()
         item.forEach{
             taskList.add( TaskItemMapper().mapDataModel(it))
         }
