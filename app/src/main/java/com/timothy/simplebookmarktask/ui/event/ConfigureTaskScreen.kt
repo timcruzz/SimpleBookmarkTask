@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.timothy.simplebookmarktask.R
@@ -31,6 +32,7 @@ import com.timothy.simplebookmarktask.config.ColorPalette
 import com.timothy.simplebookmarktask.config.Constants
 import com.timothy.simplebookmarktask.domain.mapper.getActualColor
 import com.timothy.simplebookmarktask.domain.models.TaskItemModel
+import com.timothy.simplebookmarktask.ui.navigation.navigateToHomeTaskListScreen
 import com.timothy.simplebookmarktask.ui.theme.ColorTheme
 import com.timothy.simplebookmarktask.utilities.ExtensionUtils
 import com.timothy.simplebookmarktask.utilities.GradientPositions
@@ -56,14 +58,14 @@ fun ConfigureTaskScreen(
         taskItem = taskItem,
         deleteClick = {
             viewModel.deleteTaskByIdFromDB(taskItem?.id)
-            navController.popBackStack()
+            navigateToHomeTaskListScreen(navController)
         },
         cancelClick = {
             navController.popBackStack()
         },
         saveClick = {
             viewModel.updateOrAddTaskDB(it)
-            navController.popBackStack()
+            navigateToHomeTaskListScreen(navController)
         }
     )
 }
@@ -153,7 +155,7 @@ private fun BodyContent(
                 TaskItemModel(
                     id = taskItem?.id ?: 0,
                     title = taskName.value,
-                    duration = if (ExtensionUtils.isNumber(durationInMinutes.value)) {
+                    duration = if (durationInMinutes.value.isDigitsOnly()) {
                         durationInMinutes.value.toInt()
                     } else {
                         1
@@ -164,13 +166,15 @@ private fun BodyContent(
             )
         }
     }
-
     taskItem?.let {
-        taskName.value = it.title.orEmpty()
-        durationInMinutes.value = it.duration.toString()
-        themeColor.value = getActualColor(it.themeColorString.orEmpty())
-        themeText.value = it.themeColorString.orEmpty()
+        LaunchedEffect(Unit){
+            taskName.value = it.title.orEmpty()
+            durationInMinutes.value = it.duration.toString()
+            themeColor.value = getActualColor(it.themeColorString.orEmpty())
+            themeText.value = it.themeColorString.orEmpty()
+        }
     }
+
 
     Box(
         modifier = Modifier

@@ -24,6 +24,8 @@ sealed class ColorTheme {
             val orange = Color(0xFFFF6E31)
             val darkBlue = Color(0xFF243763)
             val darkGreen = Color(0xFF395144)
+            val lightGreen = Color(0xFF37B900)
+            val yellowGreen = Color(0xFF8BC34A)
             val gray = Color(0xFF656869)
         }
     }

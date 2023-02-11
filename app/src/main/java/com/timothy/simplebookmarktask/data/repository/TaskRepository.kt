@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flowOn
 
 interface TaskRepository {
     suspend fun getAllTask(): Flow<Response<List<TaskItem>>?>
-    suspend fun getTaskById(id: Int): Flow<Response<List<TaskItem>>>
+    suspend fun getTaskById(id: Int):  Flow<Response<TaskItem>>
     suspend fun insertTask(taskItem: TaskItem): Flow<Response<TaskItem>>
     suspend fun updateTask(taskItem: TaskItem): Flow<Response<TaskItem>>
     suspend fun deleteTaskById(id: Int): Flow<Response<Boolean>>
@@ -29,7 +29,7 @@ class TaskRepositoryImpl(
        }.flowOn(Dispatchers.IO)
     }
 
-    override suspend fun getTaskById(id: Int): Flow<Response<List<TaskItem>>> {
+    override suspend fun getTaskById(id: Int): Flow<Response<TaskItem>> {
         return flow {
             emit(Response.Loading())
             val allTask = taskDatabase.getTaskDao().getTaskById(id)

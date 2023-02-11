@@ -10,7 +10,11 @@
     <string name="field_length">Length</string>
     <string name="field_theme">Theme</string>
     <string name="field_minutes">Minutes</string>
+    <string name="field_seconds">Seconds</string>
     <string name="task_name">Task Name</string>
+
+    <string name="min_elapsed">Minutes Elapsed</string>
+    <string name="min_remaining">Minutes Remaining</string>
 
     <string name="confirm_complete_form">Please complete the fields</string>
 </resources>

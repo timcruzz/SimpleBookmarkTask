@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.timothy.simplebookmarktask.config.Constants
 import com.timothy.simplebookmarktask.domain.models.TaskItemModel
+import com.timothy.simplebookmarktask.ui.details.TaskDetailsScreen
 import com.timothy.simplebookmarktask.ui.event.ConfigureTaskScreen
 import com.timothy.simplebookmarktask.ui.home.TaskListScreen
 import com.timothy.simplebookmarktask.utilities.setCurrentBackstackSavedContent
@@ -34,14 +35,28 @@ fun NavigationHandler(
                     ConfigureTaskScreen (navController = navController)
                 }
             )
+
+            composable(
+                route = Constants.ScreenIdentifier.TASK_DETAILS_SCREEN,
+                content = {
+                    TaskDetailsScreen (navController = navController)
+                }
+            )
         }
     )
 }
 
+fun navigateToHomeTaskListScreen(
+    navController: NavController,
+){
+    navController.navigate(Constants.ScreenIdentifier.HOME_TASK_LIST_SCREEN)
+}
+
+
 fun navigateToConfigTaskListScreen(
     navController: NavController,
     configIdentifier: String?,
-    taskItem: TaskItemModel? = null
+    taskItemId: Int? = null
 ){
     navController.setCurrentBackstackSavedContent(
         Constants.ConfigIdentifier.IDENTIFIER_KEY,
@@ -50,8 +65,19 @@ fun navigateToConfigTaskListScreen(
 
     navController.setCurrentBackstackSavedContent(
         Constants.ConfigIdentifier.UPDATE_TASK_KEY,
-        taskItem
+        taskItemId
     )
 
     navController.navigate(Constants.ScreenIdentifier.CONFIG_TASK_LIST_SCREEN)
+}
+
+fun navigateToTaskDetailsScreen(
+    navController: NavController,
+    taskItemId: Int? = null
+){
+    navController.setCurrentBackstackSavedContent(
+        Constants.ConfigIdentifier.UPDATE_TASK_KEY,
+        taskItemId
+    )
+    navController.navigate(Constants.ScreenIdentifier.TASK_DETAILS_SCREEN)
 }

@@ -27,6 +27,7 @@ import com.timothy.simplebookmarktask.config.ColorPalette
 import com.timothy.simplebookmarktask.config.Constants
 import com.timothy.simplebookmarktask.domain.models.TaskItemModel
 import com.timothy.simplebookmarktask.ui.navigation.navigateToConfigTaskListScreen
+import com.timothy.simplebookmarktask.ui.navigation.navigateToTaskDetailsScreen
 import com.timothy.simplebookmarktask.ui.theme.ColorTheme
 import com.timothy.simplebookmarktask.utilities.GradientPositions
 import com.timothy.simplebookmarktask.utilities.gradientBackground
@@ -73,7 +74,14 @@ fun TaskListContent(
             BodyList(
                 scrollState,
                 taskList =  taskList,
-                onTaskClicked = {}
+                onTaskClicked = { item ->
+                    navController?.let {
+                        navigateToTaskDetailsScreen(
+                            navController = it,
+                            taskItemId = item.id
+                        )
+                    }
+                }
             )
         }
     )
